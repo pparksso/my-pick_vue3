@@ -6,7 +6,8 @@ body {
     height: 100vh;
     overflow-x: hidden;
     font-family: 'Noto Sans KR', sans-serif;
-    color: #212121;
+    color: #333;
+    font-size: 16px;
     font-weight: normal;
     position: relative;
 }
@@ -17,13 +18,13 @@ button {
     outline: none;
     font-size: inherit;
     color: inherit;
-    font-family: inherit;
+    font-family: 'Noto Sans KR', sans-serif;
     cursor: pointer;
 }
 a {
     color: inherit;
     font-size: inherit;
-    font-family: inherit;
+    font-family: 'Noto Sans KR', sans-serif;
     text-decoration: none;
     cursor: pointer;
 }
@@ -32,4 +33,10 @@ img {
     max-width: 100%;
     height: auto;
     margin: 0 auto;
+}
+input {
+    font-family: 'Noto Sans KR', sans-serif;
+    outline: none;
+    border: none;
+    padding: 0;
 }
