@@ -1,0 +1,7 @@
+@mixin borderSet {
+    content: '';
+    display: block;
+    background-color: rgb(217, 217, 217);
+    position: absolute;
+    z-index: -1;
+}
