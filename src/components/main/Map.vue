@@ -1,10 +1,9 @@
 <template>
-    <section></section>
+    <div></div>
 </template>
 <script setup lang="ts"></script>
 <style lang="scss" scoped>
-section {
+div {
     background-color: #ea9999;
-    flex-grow: 1;
 }
 </style>

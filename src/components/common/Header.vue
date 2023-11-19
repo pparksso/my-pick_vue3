@@ -5,19 +5,19 @@
             <nav class="header-nav">
                 <ul class="header-nav--list">
                     <li>
-                        <button>
+                        <button @click="contentsState = 'Search'" :class="{ active: contentsState === 'Search' }">
                             <span class="material-icons"> location_on </span>
                             <span class="text">지도 홈</span>
                         </button>
                     </li>
                     <li>
-                        <button>
+                        <button @click="contentsState = 'Scrap'" :class="{ active: contentsState === 'Scrap' }">
                             <span class="material-icons"> star </span>
                             <span class="text">저장</span>
                         </button>
                     </li>
                     <li>
-                        <button class="active">
+                        <button @click="contentsState = 'More'" :class="{ active: contentsState === 'More' }">
                             <span class="material-icons"> more_horiz </span>
                             <span class="text">더보기</span>
                         </button>
@@ -39,6 +39,10 @@
 </template>
 <script setup>
 import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useMainStore } from '@/store/main';
+
+const { contentsState } = storeToRefs(useMainStore());
 
 const showUser = ref(false);
 
@@ -55,6 +59,8 @@ const userHandler = () => {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: #fff;
+    z-index: 1000000;
     &-logo {
         text-align: center;
         position: relative;
