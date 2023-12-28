@@ -17,6 +17,7 @@ const openHandler = () => {
 </script>
 <style lang="scss" scope>
 .contents {
+    background-color: #fff;
     width: 390px;
     box-shadow:
         rgba(0, 0, 0, 0.2) 0px 0px 5px 0px,
