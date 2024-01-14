@@ -1,12 +1,12 @@
 <template>
     <div class="search-box">
         <button class="search-box--button__search"><span class="blind">검색</span></button>
-        <button class="search-box--button__close" v-if="word.length > 0" @click="word = ''">
+        <button class="search-box--button__close" v-if="closeBtnState" @click="resetSearchHandler">
             <span class="blind">삭제</span>
         </button>
         <div class="search-box--input">
-            <label for="word" v-if="word.length === 0">장소 검색</label>
-            <input type="text" id="word" maxlength="200" autocomplete="off" v-model="word" />
+            <label for="word" v-if="labelState">장소 검색</label>
+            <input type="text" id="word" maxlength="200" autocomplete="off" v-model="word" @keyup="searchingHandler" />
         </div>
     </div>
 </template>
@@ -14,6 +14,25 @@
 import { ref } from 'vue';
 
 const word = ref('');
+const labelState = ref(true);
+const closeBtnState = ref(false);
+
+const searchingHandler = (e: KeyboardEvent) => {
+    const { value } = e.target as HTMLInputElement;
+    if (value !== '') {
+        labelState.value = false;
+        closeBtnState.value = true;
+    } else {
+        labelState.value = true;
+        closeBtnState.value = false;
+    }
+};
+
+const resetSearchHandler = () => {
+    word.value = '';
+    labelState.value = true;
+    closeBtnState.value = false;
+};
 // 1. 검색창
 // 2. 검색 리스트
 </script>
@@ -26,7 +45,8 @@ const word = ref('');
     padding-left: 45px;
     &--button__search {
         position: absolute;
-        top: 9px;
+        top: 50%;
+        transform: translateY(-50%);
         left: 15px;
         width: 25px;
         height: 24px;
