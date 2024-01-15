@@ -12,12 +12,19 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
+import searchApi from '@/api/search';
 
 const word = ref('');
 const labelState = ref(true);
 const closeBtnState = ref(false);
 
+const searchApiHandler = async (resultValue: string) => {
+    const list = await searchApi.fetchLocationList(resultValue);
+    console.log(list);
+};
+
 const searchingHandler = (e: KeyboardEvent) => {
+    const { code } = e;
     const { value } = e.target as HTMLInputElement;
     if (value !== '') {
         labelState.value = false;
@@ -26,6 +33,7 @@ const searchingHandler = (e: KeyboardEvent) => {
         labelState.value = true;
         closeBtnState.value = false;
     }
+    if (code === 'Enter') searchApiHandler(value);
 };
 
 const resetSearchHandler = () => {
@@ -33,8 +41,6 @@ const resetSearchHandler = () => {
     labelState.value = true;
     closeBtnState.value = false;
 };
-// 1. 검색창
-// 2. 검색 리스트
 </script>
 <style lang="scss" scoped>
 .search-box {
