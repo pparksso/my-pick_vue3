@@ -28,9 +28,6 @@ const openHandler = () => {
     height: 100%;
     left: 0;
     transition: all 0.5s ease-in-out;
-    &-inner {
-        padding: 20px;
-    }
     &-arrow {
         position: absolute;
         top: 50%;
