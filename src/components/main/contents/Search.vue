@@ -24,8 +24,12 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
 import searchApi from '@/api/search';
+import { useMapStore } from '@/store/map';
 import SearchList from '@/components/main/contents/SearchList.vue';
+
+const { nowX, nowY } = storeToRefs(useMapStore());
 
 const word = ref('');
 const labelState = ref(true);
@@ -35,14 +39,17 @@ const list = ref();
 // 지금 위치 y,x 갖고있어야됨
 // 이름이 똑같은 장소 => 지금 위치에서 제일 가까운 장소가 제일 위
 
-// 리스트 퍼블리싱
 // 지도 퍼블리싱
 // 그 후 나머지 작업..
 
 const searchApiHandler = async () => {
-    const result = await searchApi.fetchLocationList(word.value);
-    list.value = [...result.data.documents];
-    console.log(list.value);
+    if (nowX.value) {
+        const result = await searchApi.fetchLocationList(word.value, nowX.value, nowY.value);
+        list.value = [...result.data.documents];
+        console.log(list.value);
+    } else {
+        console.log('wait');
+    }
 };
 
 const searchBarHandler = (e: KeyboardEvent) => {

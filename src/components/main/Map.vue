@@ -6,6 +6,10 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useMapStore } from '@/store/map';
+
+const { nowX, nowY } = storeToRefs(useMapStore());
 
 declare global {
     interface Window {
@@ -36,6 +40,8 @@ onMounted(() => {
     /* global kakao */
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
+            nowX.value = position.coords.longitude;
+            nowY.value = position.coords.latitude;
             map.value.setLevel(3);
             map.value.panTo(new window.kakao.maps.LatLng(position.coords.latitude, position.coords.longitude));
         });
