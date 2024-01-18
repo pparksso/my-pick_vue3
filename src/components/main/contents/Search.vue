@@ -39,8 +39,9 @@ import { storeToRefs } from 'pinia';
 import searchApi from '@/api/search';
 import { useMapStore } from '@/store/map';
 import SearchList from '@/components/main/contents/SearchList.vue';
+import { Place } from '@/type/api';
 
-const { nowX, nowY } = storeToRefs(useMapStore());
+const { nowX, nowY, overlayList } = storeToRefs(useMapStore());
 
 const word = ref('');
 const labelState = ref(true);
@@ -48,17 +49,18 @@ const closeBtnState = ref(false);
 const list = ref();
 const loadingState = ref(false);
 
-// 지금 위치 y,x 갖고있어야됨
-// 이름이 똑같은 장소 => 지금 위치에서 제일 가까운 장소가 제일 위
-
-// 지도 퍼블리싱
-// 그 후 나머지 작업..
+// 따로 list를 만들어서 위도, 경도, 이름 정도만 들어가게 해서 .. 사용하는 건 어떤지..?
 
 const searchApiHandler = async () => {
     if (nowX.value) {
         loadingState.value = true;
         const result = await searchApi.fetchLocationList(word.value, nowX.value, nowY.value);
         list.value = [...result.data.documents];
+        overlayList.value = result.data.documents.map((item: Place) => ({
+            name: item.place_name,
+            lat: item.y,
+            lng: item.x,
+        }));
         loadingState.value = false;
     }
 };

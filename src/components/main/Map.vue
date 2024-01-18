@@ -5,11 +5,12 @@
     <div id="map" v-else></div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMapStore } from '@/store/map';
+import { Location } from '@/type/map';
 
-const { nowX, nowY } = storeToRefs(useMapStore());
+const { nowX, nowY, overlayList } = storeToRefs(useMapStore());
 
 declare global {
     interface Window {
@@ -20,6 +21,62 @@ declare global {
 const noMap = ref(false);
 
 const map = ref();
+const overlayArr = ref<any[]>([]);
+
+const overlayDom = (name: string) => {
+    return `<div class="overlay-box">
+        <span class="overlay-box__name">${name}</span>
+        <style>
+        .overlay-box {
+            position: relative; 
+            border-radius:20px; 
+            padding: 7px 10px; 
+            background-color: #fff; 
+            border: 1px solid #0363d0;
+            &:hover {
+                background-color: #0363d0;
+                &::before {
+                    background-color: #0363d0;
+                }
+                .overlay-box__name {
+                    color: #fff;
+                }
+            }
+        }
+        .overlay-box::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 40%;
+            width: 7px;
+            height: 7px;
+            border: 1px solid #0363d0;
+            border-right: none;
+            border-bottom: none;
+            background-color: #fff;
+            transform: rotate(-135deg);
+        }
+        .overlay-box__name {
+            vertical-align: top; 
+            font-size: 13px; 
+            font-weight:bold;
+        }
+            
+        }
+    </style>
+    </div>`;
+};
+
+const showOverlay = (location: Location) => {
+    const customOverlay = new window.kakao.maps.CustomOverlay({
+        position: new window.kakao.maps.LatLng(location.lat, location.lng),
+        content: overlayDom(location.name),
+        // xAnchor: 0,
+        yAnchor: 1.3,
+    });
+    overlayArr.value.push(customOverlay);
+    customOverlay.setMap(map.value);
+};
 
 const initMap = () => {
     const container = document.getElementById('map');
@@ -49,6 +106,16 @@ onMounted(() => {
         noMap.value = true;
     }
 });
+
+watch(overlayList, (newOverlayList, oldOverlayList) => {
+    if (newOverlayList) {
+        if (oldOverlayList) {
+            overlayArr.value.forEach((overlay: any) => overlay.setMap(null));
+            overlayArr.value = [];
+        }
+        newOverlayList.forEach((item: Location) => showOverlay(item));
+    }
+});
 </script>
 <style lang="scss" scoped>
 #map {
@@ -66,5 +133,10 @@ onMounted(() => {
     p {
         font-size: 22px;
     }
+}
+.overlay-box {
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #0363d0;
 }
 </style>
