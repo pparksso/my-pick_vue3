@@ -20,6 +20,9 @@
             </div>
         </div>
     </div>
+    <div class="search-list--loading" v-if="loadingState">
+        <img src="@/assets/images/common/loading.gif" alt="loading" />
+    </div>
     <div class="search-list--no" v-if="list?.length === 0">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="MQgGs" aria-hidden="true">
             <path
@@ -43,6 +46,7 @@ const word = ref('');
 const labelState = ref(true);
 const closeBtnState = ref(false);
 const list = ref();
+const loadingState = ref(false);
 
 // 지금 위치 y,x 갖고있어야됨
 // 이름이 똑같은 장소 => 지금 위치에서 제일 가까운 장소가 제일 위
@@ -52,11 +56,10 @@ const list = ref();
 
 const searchApiHandler = async () => {
     if (nowX.value) {
+        loadingState.value = true;
         const result = await searchApi.fetchLocationList(word.value, nowX.value, nowY.value);
         list.value = [...result.data.documents];
-        console.log(list.value);
-    } else {
-        console.log('wait');
+        loadingState.value = false;
     }
 };
 
@@ -85,6 +88,7 @@ const resetSearchHandler = () => {
 <style lang="scss" scoped>
 .search {
     padding: 15px 25px;
+    border-bottom: 1px solid rgb(240, 240, 243);
     &-box {
         position: relative;
         height: 42px;
@@ -158,7 +162,6 @@ const resetSearchHandler = () => {
         }
     }
     &-list--no {
-        border-top: 1px solid rgb(240, 240, 243);
         text-align: center;
         padding-top: 60px;
         p {
@@ -171,6 +174,12 @@ const resetSearchHandler = () => {
             height: 48px;
             display: inline-block;
             vertical-align: top;
+        }
+    }
+    &-list--loading {
+        padding-top: 60px;
+        img {
+            width: 80px;
         }
     }
 }

@@ -66,7 +66,6 @@ const mTokm = (m: string) => {
 </script>
 <style lang="scss" scoped>
 .search-list {
-    border-top: 1px solid rgb(240, 240, 243);
     height: calc(100vh - 72px);
     overflow-y: auto;
     &--item {
