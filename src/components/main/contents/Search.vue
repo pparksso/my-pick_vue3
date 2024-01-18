@@ -20,7 +20,15 @@
             </div>
         </div>
     </div>
-    <SearchList :list="list" />
+    <div class="search-list--no" v-if="list?.length === 0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="MQgGs" aria-hidden="true">
+            <path
+                d="M47 24a23 23 0 10-46 0 23 23 0 0046 0zm1 0a24 24 0 11-48 0 24 24 0 0148 0zM23.3 12.5a.7.7 0 011.4 0V27a.7.7 0 01-1.4 0V12.5zm1.95 20.75c0 .69-.56 1.25-1.25 1.25a1.25 1.25 0 111.25-1.25z"
+            ></path>
+        </svg>
+        <p>조건에 맞는 업체가 없습니다.</p>
+    </div>
+    <SearchList :list="list" v-else />
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
@@ -147,6 +155,22 @@ const resetSearchHandler = () => {
             &:has(input:focus):focus-within label {
                 color: rgb(216, 216, 216);
             }
+        }
+    }
+    &-list--no {
+        border-top: 1px solid rgb(240, 240, 243);
+        text-align: center;
+        padding-top: 60px;
+        p {
+            margin-top: 15px;
+            font-weight: 400;
+        }
+        svg {
+            fill: rgba(130, 136, 148, 0.38);
+            width: 48px;
+            height: 48px;
+            display: inline-block;
+            vertical-align: top;
         }
     }
 }
