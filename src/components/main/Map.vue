@@ -10,7 +10,7 @@ import { storeToRefs } from 'pinia';
 import { useMapStore } from '@/store/map';
 import { Location } from '@/type/map';
 
-const { nowX, nowY, overlayList } = storeToRefs(useMapStore());
+const { nowX, nowY, nowPlace, overlayList } = storeToRefs(useMapStore());
 
 declare global {
     interface Window {
@@ -114,6 +114,14 @@ watch(overlayList, (newOverlayList, oldOverlayList) => {
             overlayArr.value = [];
         }
         newOverlayList.forEach((item: Location) => showOverlay(item));
+        map.value.panTo(new window.kakao.maps.LatLng(newOverlayList[0].lat, newOverlayList[0].lng));
+    }
+});
+
+watch(nowPlace, (newNowPlace) => {
+    if (newNowPlace) {
+        map.value.panTo(new window.kakao.maps.LatLng(newNowPlace.y, newNowPlace.x));
+        nowPlace.value = undefined;
     }
 });
 </script>
